@@ -7,6 +7,7 @@ from langchain.schema import LLMResult, AgentAction, AgentFinish
 
 class StreamingLLMCallbackHandler(BaseCallbackHandler):
     """Callback handler for streaming LLM responses."""
+
     def __init__(self, on_new_token, on_end) -> None:
         self.on_new_token = on_new_token
         self.on_end = on_end
@@ -17,7 +18,7 @@ class StreamingLLMCallbackHandler(BaseCallbackHandler):
         """Print out the prompts."""
         pass
 
-    def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
+    def on_llm_new_token(self, token: str, *args, **kwargs: Any) -> None:
         """Run on new LLM token. Only available when streaming is enabled."""
         self.on_new_token(token)
 
@@ -39,7 +40,7 @@ class StreamingLLMCallbackHandler(BaseCallbackHandler):
 
     def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> None:
         """Print out that we finished a chain."""
-        st.write("Finished chain.")
+        pass
 
     def on_chain_error(
         self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
@@ -86,4 +87,3 @@ class StreamingLLMCallbackHandler(BaseCallbackHandler):
         """Run on agent end."""
         # st.write requires two spaces before a newline to render it
         pass
-    

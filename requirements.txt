@@ -9,3 +9,6 @@ python-decouple
 pydantic
 supabase
 sse-starlette
+pandas
+tabulate
+unstructured

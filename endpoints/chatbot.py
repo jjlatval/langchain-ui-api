@@ -5,7 +5,7 @@ from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 from queue import Queue
 from langchain.callbacks import get_openai_callback
-from lib.agents import makeAgent
+from lib.agents import make_agent
 
 
 class Chatbot(BaseModel):
@@ -36,7 +36,7 @@ async def chatbot(chatbot_id: int, body: Chatbot):
 
     def conversation_run_thread(payload: str) -> None:
         with get_openai_callback():
-            agent = makeAgent(chatbot_id, on_llm_new_token, on_llm_end)
+            agent = make_agent(chatbot_id, on_llm_new_token, on_llm_end)
             agent.run(payload)
 
     data_queue = Queue()
