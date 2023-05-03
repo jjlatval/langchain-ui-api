@@ -7,7 +7,7 @@ from routers import router
 app = FastAPI(
     title="LangChain UI backend",
     description="The backend for LangChain UI",
-    version="0.0.1"
+    version="0.0.1",
 )
 
 app.add_middleware(
