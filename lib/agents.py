@@ -1,12 +1,11 @@
-import pandas as pd
+import requests
 
 from typing import Any, List
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import DataFrameLoader
+from langchain.document_loaders import UnstructuredAPIFileIOLoader
 
-from langchain.agents import create_pandas_dataframe_agent
 from lib.callbacks import StreamingLLMCallbackHandler
 from lib.db import supabase as supabase_client
 from lib.prompts import default_prompt
@@ -42,30 +41,32 @@ def use_datasource(datasource_id: str) -> Any:
         .single()
         .execute()
     )
-    df = pd.read_csv(datasource.data["url"])
-    loader = DataFrameLoader(df)
-    data = loader.load()
-    print(data)
-
-    return df
+    file_url = datasource.data["url"]
+    file_type = datasource.data["type"]
+    file_name = f"{file_url}.{file_type}"
+    datasource.data["type"]
+    file_repsonse = requests.get(file_url)
+    loader = UnstructuredAPIFileIOLoader(
+        file=file_repsonse.content, file_filename=file_name
+    )
+    docs = loader.load()
+    return docs
 
 
 def make_datasource_agent(
     chatbot_id: str, datasource_id: str, on_llm_new_token: Any, on_llm_end: Any
 ):
     """Creates an Agent for Q&A of documents"""
-    df = use_datasource(datasource_id)
+    datasource = use_datasource(datasource_id)
+    print(datasource)
     memory = use_memory(chatbot_id)
-    agent = create_pandas_dataframe_agent(
-        llm=ChatOpenAI(
-            streaming=True,
-            verbose=True,
-            callbacks=[StreamingLLMCallbackHandler(on_llm_new_token, on_llm_end)],
-        ),
-        df=df,
+    memory = use_memory(chatbot_id)
+    llm = ChatOpenAI(
+        streaming=True,
         verbose=True,
-        agent_executor_kwargs={"memory": memory},
+        callbacks=[StreamingLLMCallbackHandler(on_llm_new_token, on_llm_end)],
     )
+    agent = LLMChain(llm=llm, memory=memory, verbose=True, prompt=default_prompt)
     return agent
 
 
