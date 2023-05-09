@@ -59,7 +59,6 @@ def make_datasource_agent(
     datasource = use_datasource(datasource_id)
     print(datasource)
     memory = use_memory(chatbot_id)
-    memory = use_memory(chatbot_id)
     llm = ChatOpenAI(
         streaming=True,
         verbose=True,

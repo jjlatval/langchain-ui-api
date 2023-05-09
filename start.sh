@@ -1,6 +1,0 @@
-export DATABASE_URL="postgres://postgres:Svenljunga123!@db.jjycswopgnwzeiogomvj.supabase.co:6543/postgres?pgbouncer=true"
-export SUPABASE_URL="https://jjycswopgnwzeiogomvj.supabase.co"
-export SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqeWNzd29wZ253emVpb2dvbXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzk1MTQ0OTAsImV4cCI6MTk5NTA5MDQ5MH0.o-rwuGMJGRovte3f5b22Dug4kBRsYGkwmE3kHMP8o_M"
-export OPENAI_API_KEY="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"
-
-uvicorn app.main:app --reload
