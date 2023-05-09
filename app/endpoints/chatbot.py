@@ -5,7 +5,7 @@ from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 from queue import Queue
 from langchain.callbacks import get_openai_callback
-from lib.agents import make_agent
+from app.lib.agents import make_agent
 
 
 class Chatbot(BaseModel):

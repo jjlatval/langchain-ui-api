@@ -10,18 +10,10 @@
 
 Generate ads with GPT
 
-1. Create and activate a virtual environment
+1. Use poetry to setup virtualenv and install packages
 
    ```sh
-   virtualenv MY_ENV
-   source MY_ENV/bin/activate
-   ```
-
-1. Install packages with pip
-
-   ```sh
-   cd langchain-ui-api
-   pip install -r requirements.txt
+   poetry install
    ```
 
 1. Set up your .env file

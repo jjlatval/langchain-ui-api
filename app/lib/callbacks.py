@@ -1,6 +1,5 @@
 """Callback handlers used in the app."""
 from typing import Any, Dict, List, Union, Optional
-
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 

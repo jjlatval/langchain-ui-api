@@ -5,10 +5,9 @@ from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import UnstructuredAPIFileIOLoader
-
-from lib.callbacks import StreamingLLMCallbackHandler
-from lib.db import supabase as supabase_client
-from lib.prompts import default_prompt
+from app.lib.callbacks import StreamingLLMCallbackHandler
+from app.lib.db import supabase as supabase_client
+from app.lib.prompts import default_prompt
 
 
 def use_memory(chatbot_id: str) -> List:
