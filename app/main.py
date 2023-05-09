@@ -1,13 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from routers import router
+from app.routers import router
 
 
 app = FastAPI(
     title="LangChain UI backend",
     description="The backend for LangChain UI",
-    version="0.0.1"
+    version="0.0.1",
 )
 
 app.add_middleware(

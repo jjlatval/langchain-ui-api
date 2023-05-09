@@ -1,12 +1,12 @@
 """Callback handlers used in the app."""
 from typing import Any, Dict, List, Union, Optional
-
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 
 
 class StreamingLLMCallbackHandler(BaseCallbackHandler):
     """Callback handler for streaming LLM responses."""
+
     def __init__(self, on_new_token, on_end) -> None:
         self.on_new_token = on_new_token
         self.on_end = on_end
@@ -39,7 +39,7 @@ class StreamingLLMCallbackHandler(BaseCallbackHandler):
 
     def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> None:
         """Print out that we finished a chain."""
-        st.write("Finished chain.")
+        pass
 
     def on_chain_error(
         self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
@@ -86,4 +86,3 @@ class StreamingLLMCallbackHandler(BaseCallbackHandler):
         """Run on agent end."""
         # st.write requires two spaces before a newline to render it
         pass
-    
