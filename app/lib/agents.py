@@ -45,11 +45,14 @@ def use_datasource(datasource_id: str) -> Any:
     file_name = f"{file_url}.{file_type}"
     datasource.data["type"]
     file_repsonse = requests.get(file_url)
-    loader = UnstructuredAPIFileIOLoader(
-        file=file_repsonse.content, file_filename=file_name
-    )
-    docs = loader.load()
-    return docs
+    try:
+        loader = UnstructuredAPIFileIOLoader(
+            file=file_repsonse.content, file_filename=file_name
+        )
+        docs = loader.load()
+        return docs
+    except Exception as e:
+        print(e)
 
 
 def make_datasource_agent(
