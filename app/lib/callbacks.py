@@ -17,7 +17,7 @@ class StreamingLLMCallbackHandler(BaseCallbackHandler):
         """Print out the prompts."""
         pass
 
-    def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
+    def on_llm_new_token(self, token: str, *args, **kwargs: Any) -> None:
         """Run on new LLM token. Only available when streaming is enabled."""
         self.on_new_token(token)
 

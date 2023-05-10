@@ -3,14 +3,9 @@ import threading
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
 from pydantic import BaseModel
-from decouple import config
 from queue import Queue
-from langchain.memory import ChatMessageHistory, ConversationBufferMemory
-from langchain.chains import LLMChain
-from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
-from app.lib.db import supabase as supabase_client
-from app.lib.callbacks import StreamingLLMCallbackHandler
+from app.lib.agents import make_agent
 
 
 class Chatbot(BaseModel):
@@ -24,21 +19,6 @@ router = APIRouter()
 async def chatbot(chatbot_id: int, body: Chatbot):
     """Chatbot endpoint"""
     payload = body.message
-    messages = (
-        supabase_client.table("ChatbotMessage")
-        .select("*")
-        .eq("chatbotId", chatbot_id)
-        .order(column="createdAt", desc=True)
-        .limit(size=4)
-        .execute()
-    )
-    history = ChatMessageHistory()
-    [
-        history.add_ai_message(message["message"])
-        if message["agent"] == "ai"
-        else history.add_user_message(message["message"])
-        for message in messages.data
-    ]
 
     def on_llm_new_token(token: str) -> None:
         data_queue.put(token)
@@ -56,15 +36,8 @@ async def chatbot(chatbot_id: int, body: Chatbot):
 
     def conversation_run_thread(payload: str) -> None:
         with get_openai_callback():
-            memory = ConversationBufferMemory(chat_memory=history)
-            llm = ChatOpenAI(
-                streaming=True,
-                openai_api_key=config("OPENAI_API_KEY"),
-                verbose=True,
-                callbacks=[StreamingLLMCallbackHandler(on_llm_new_token, on_llm_end)],
-            )
-            conversation = LLMChain(llm=llm, memory=memory, verbose=True)
-            conversation.run(payload)
+            agent = make_agent(chatbot_id, on_llm_new_token, on_llm_end)
+            agent.run(payload)
 
     data_queue = Queue()
     t = threading.Thread(target=conversation_run_thread, args=(payload,))
